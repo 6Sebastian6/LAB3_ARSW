@@ -51,13 +51,59 @@ src/main/java/edu/eci/arsw/blueprints
 
 ### 1. Familiarización con el código base
 - Revisa el paquete `model` con las clases `Blueprint` y `Point`.  
+
+**Point:** Tenemos una sola linea en la que se obtiene un constructor con sus getters, este nos da un punto de coordenadas del un plano
+```java
+  public record Point(int x, int y) { }
+  ```
+**Blueprint:** Este nos da un plano que esta compuesto por varios puntos con el autor, nombre y los puntos 
+
 - Entiende la capa `persistence` con `InMemoryBlueprintPersistence`.  
+
+Esta tiene 5 operaciones que son guardar, buscar por autor y nombre, buscar por autor, traer todos, y agregar un punto.
+Tambien detecta y inyexcta automaticamente en la interfaz BlueprintPersistence. Tambien maneja exceptiones 
+
 - Analiza la capa `services` (`BlueprintsServices`) y el controlador `BlueprintsAPIController`.
+
+**BlueprintService:** Este actua como un intermediario entre los controladores y la base de datos, tambien aplica un filter sobre el resultado y 
+expone los endpoints REST actuales bajo "/blueprints"
 
 ### 2. Migración a persistencia en PostgreSQL
 - Configura una base de datos PostgreSQL (puedes usar Docker).  
+
+Creamos un compose.yaml
+
+Tambien agregamos unas dependencas al Pom de JPA para no escribir SQL a mano y configuramos el "application.properties" hacemos
+que Hibernate cree las tablas solo, de las clases "@Entity" que se va a crear 
+
+En persistence creamos **PointEntity** para que cada Point pertenecera a un BlueprintEntity, creamos *BlueprintEntity:** para tener la representacion en base de datos de Blueprint
+y creamos **BlueprintJpaRepostitory:** que genera la implementacion y el SQL solo con los nombre de los metodos
+
 - Implementa un nuevo repositorio `PostgresBlueprintPersistence` que reemplace la versión en memoria.  
-- Mantén el contrato de la interfaz `BlueprintPersistence`.  
+
+Hace que este inyecte en vez de InMemoryBlueprintPersistence en cualquier lugar donde pida la interfaz sin tener
+que tocar el Service ni el controller
+ 
+- Probamos de esta manera
+  ```bash
+  # Levanta el Postgres
+    docker compose up -d
+
+    #Compilar y correr la app
+    mvn clean install
+    mvn spring-boot:run
+
+    #Probar no van a la memoria 
+    curl -i -X POST http://localhost:8080/blueprints -H 'Content-Type: application/json' -d '{"author":"john","name":"kitchen","points":[{"x":1,"y":1},{"x":2,"y":2}]}'
+
+    curl -s http://localhost:8080/blueprints | jq
+  ```
+Tenemos que abrir otra terminal y funcionara
+    ![Prueba](imagenes/img1.png)
+Al ejecutar SELECT * FROM blueprints, vemos que se creó correctamente el Blueprint y al 
+hacer SELECT * FROM points, muestra que los dos puntos tambien se guardaron.
+    ![Prueba](imagenes/img2.png)
+
 
 ### 3. Buenas prácticas de API REST
 - Cambia el path base de los controladores a `/api/v1/blueprints`.  

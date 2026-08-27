@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16
+    container_name: blueprints-db
+    environment:
+      POSTGRES_USER: blueprints
+      POSTGRES_PASSWORD: blueprints
+      POSTGRES_DB: blueprintsdb
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U blueprints -d blueprintsdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
