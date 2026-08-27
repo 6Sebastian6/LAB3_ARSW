@@ -141,11 +141,11 @@ Tambien creamos el **GlobalExceptionHandler** para que centralice el manejo de e
 y los errores respondan con el mismo formato del ApiResponse y Bad Request.
 
 para realizar las pruebas necesitamos JASON si no lo tienes instalalo de esta manera
-```json
+```bash
   winget install jqlang.jq
 ```
 Estos son los ejemplos
-```json
+```bash
   //200 OK
   curl -s http://localhost:8080/api/v1/blueprints | jq
     
@@ -160,6 +160,7 @@ curl -s -X POST http://localhost:8080/api/v1/blueprints -H "Content-Type: applic
 ```
 aqui lo vemos en las imagenes
 ![Prueba](imagenes/img3.png)
+
 ### 4. OpenAPI / Swagger
 - Configura `springdoc-openapi` en el proyecto.  
 - Expón documentación automática en `/swagger-ui.html`.  
