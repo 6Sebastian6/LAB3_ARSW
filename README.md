@@ -106,7 +106,8 @@ hacer SELECT * FROM points, muestra que los dos puntos tambien se guardaron.
 
 
 ### 3. Buenas prácticas de API REST
-- Cambia el path base de los controladores a `/api/v1/blueprints`.  
+
+- Cambia el path base de los controladores a `/api/v1/blueprints`.
 - Usa **códigos HTTP** correctos:  
   - `200 OK` (consultas exitosas).  
   - `201 Created` (creación).  
@@ -126,6 +127,39 @@ hacer SELECT * FROM points, muestra que los dos puntos tambien se guardaron.
   }
   ```
 
+Primero creamos la carpeta dto en la que va a estar el ApiResponse que tendra todas las respuesta de la API ya sean de exito
+o de error, para que reciba la misma forma de JSON, un ejemplo en JSON como el que nos dieron antes y con los codigos HTTP que nos dieron.
+
+```java
+  {
+        "code": 200,
+        "message": "execute ok",
+        "data": { "author": "john", "name": "house", "points": [...] }
+    }
+```
+Tambien creamos el **GlobalExceptionHandler** para que centralice el manejo de errores anted de que lleguen al controller
+y los errores respondan con el mismo formato del ApiResponse y Bad Request.
+
+para realizar las pruebas necesitamos JASON si no lo tienes instalalo de esta manera
+```json
+  winget install jqlang.jq
+```
+Estos son los ejemplos
+```json
+  //200 OK
+  curl -s http://localhost:8080/api/v1/blueprints | jq
+    
+  //404 Not Found
+  curl -i http://localhost:8080/api/v1/blueprints/nadie
+    
+  //201 Created
+  curl -s -X POST http://localhost:8080/api/v1/blueprints -H "Content-Type: application/json" -d "{\"author\":\"juan\",\"name\":\"office\",\"points\":[{\"x\":5,\"y\":5},{\"x\":6,\"y\":6}]}" | jq
+    
+  //400 Bad Request (ya existe este autor)
+curl -s -X POST http://localhost:8080/api/v1/blueprints -H "Content-Type: application/json" -d "{\"author\":\"juan\",\"name\":\"office\",\"points\":[{\"x\":5,\"y\":5},{\"x\":6,\"y\":6}]}" | jq
+```
+aqui lo vemos en las imagenes
+![Prueba](imagenes/img3.png)
 ### 4. OpenAPI / Swagger
 - Configura `springdoc-openapi` en el proyecto.  
 - Expón documentación automática en `/swagger-ui.html`.  
