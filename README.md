@@ -192,7 +192,7 @@ ahora para probar el swager se ejecuta de esta manera, abriendo el http en el na
 ```
 
 En esta imagen se puede ver como quedo el swagger
-![Prueba](imagenes/img2.png)
+![Prueba](imagenes/img4.png)
 
 ### 5. Filtros de *Blueprints*
 - Implementa filtros:
