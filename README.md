@@ -166,6 +166,34 @@ aqui lo vemos en las imagenes
 - Expón documentación automática en `/swagger-ui.html`.  
 - Anota endpoints con `@Operation` y `@ApiResponse`.
 
+Ya en el pom estaba la configuracion del `springdoc-openapi`, tambien con el pom se epone
+la documentacion en el swagger. Cambio la clase **BlueprintsAPIController** encima de cad uno de los 
+4 metodos del controlador como en elmetodo **getAll**
+
+```java
+  @Operation(
+        summary = "Obtener todos los blueprints",
+        description = "Retorna el conjunto completo de blueprints registrados en el sistema."
+)
+@ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "200",
+                description = "Consulta exitosa",
+                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                        schema = @Schema(implementation = ApiResponse.class)))
+})
+@GetMapping
+public ResponseEntity<ApiResponse<Set<Blueprint>>> getAll()
+```
+ahora para probar el swager se ejecuta de esta manera, abriendo el http en el navegador 
+```bash
+  mvn spring-boot:run
+  http://localhost:8080/swagger-ui.html
+```
+
+En esta imagen se puede ver como quedo el swagger
+![Prueba](imagenes/img2.png)
+
 ### 5. Filtros de *Blueprints*
 - Implementa filtros:
   - **RedundancyFilter**: elimina puntos duplicados consecutivos.  
