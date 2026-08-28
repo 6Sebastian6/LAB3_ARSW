@@ -146,16 +146,16 @@ para realizar las pruebas necesitamos JASON si no lo tienes instalalo de esta ma
 ```
 Estos son los ejemplos
 ```bash
-  //200 OK
+  #200 OK
   curl -s http://localhost:8080/api/v1/blueprints | jq
     
-  //404 Not Found
+  #404 Not Found
   curl -i http://localhost:8080/api/v1/blueprints/nadie
     
-  //201 Created
+  #201 Created
   curl -s -X POST http://localhost:8080/api/v1/blueprints -H "Content-Type: application/json" -d "{\"author\":\"juan\",\"name\":\"office\",\"points\":[{\"x\":5,\"y\":5},{\"x\":6,\"y\":6}]}" | jq
     
-  //400 Bad Request (ya existe este autor)
+  #400 Bad Request (ya existe este autor)
 curl -s -X POST http://localhost:8080/api/v1/blueprints -H "Content-Type: application/json" -d "{\"author\":\"juan\",\"name\":\"office\",\"points\":[{\"x\":5,\"y\":5},{\"x\":6,\"y\":6}]}" | jq
 ```
 aqui lo vemos en las imagenes
