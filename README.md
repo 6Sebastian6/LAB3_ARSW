@@ -200,6 +200,21 @@ En esta imagen se puede ver como quedo el swagger
   - **UndersamplingFilter**: conserva 1 de cada 2 puntos.  
 - Activa los filtros mediante perfiles de Spring (`redundancy`, `undersampling`).  
 
+Tenemos el **RedundancyFilter:** que elimina puntos duplicados consecutivos y este recorre la lista de puntos 
+comparando cada punto con el anterior.
+**UndersamplingFilter:** conserva 1 de cada 2 puntos reduciendo la densidad del trazo a la mitad.
+ya que si tiene 2 puntos o menos, no aplica el filtro, porque no tendria sentido reducirlo mas 
+
+se puede probar con 
+```bash
+  #no filtra
+  mvn spring-boot:run
+  #RedundancyFilter
+  mvn spring-boot:run -Dspring-boot.run.profiles=redundancy
+  #UndersamplingFilter
+  mvn spring-boot:run -Dspring-boot.run.profiles=undersampling
+```
+
 ---
 
 ## ✅ Entregables
